@@ -105,16 +105,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\src\SDL-1.2.15\include;C:\src\SDL_image-1.2.12\include;C:\src\SDL_mixer-1.2.12\include;C:\src\SDL_ttf-2.0.11;C:\src\smpeg-0.4.5+cvs20030824.orig;C:\src\lua-5.1.5\etc;C:\src\lua-5.1.5\src;C:\src\bzip2-1.0.6;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\src\SDL-1.2.15\lib\x64;C:\src\SDL_image-1.2.12\lib\x64;C:\src\SDL_mixer-1.2.12\lib\x64;C:\src\SDL_ttf-2.0.11\VisualC\x64\Debug;C:\src\smpeg-0.4.5+cvs20030824.orig\VisualC\Debug;C:\src\lua-5.1.5\src;C:\src\bzip2-1.0.6\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\SDL-1.2.15\include;..\SDL_image-1.2.12;..\SDL_mixer-1.2.12;..\SDL_ttf-2.0.11;..\smpeg-debian-0.4.5+cvs20030824-8;..\lua-5.1.5\etc;..\lua-5.1.5\src;..\bzip2-1.0.6;$(IncludePath)</IncludePath>
+    <LibraryPath>..\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\src\SDL-1.2.15\include;C:\src\SDL_image-1.2.12\include;C:\src\SDL_mixer-1.2.12\include;C:\src\SDL_ttf-2.0.11;C:\src\smpeg-0.4.5+cvs20030824.orig;C:\src\lua-5.1.5\etc;C:\src\lua-5.1.5\src;C:\src\bzip2-1.0.6;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\src\SDL-1.2.15\lib\x64;C:\src\SDL_image-1.2.12\lib\x64;C:\src\SDL_mixer-1.2.12\lib\x64;C:\src\SDL_ttf-2.0.11\VisualC\x64\Release;C:\src\smpeg-0.4.5+cvs20030824.orig\VisualC\Release;C:\src\lua-5.1.5\src;C:\src\bzip2-1.0.6\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\SDL-1.2.15\include;..\SDL_image-1.2.12;..\SDL_mixer-1.2.12;..\SDL_ttf-2.0.11;..\smpeg-debian-0.4.5+cvs20030824-8;..\lua-5.1.5\etc;..\lua-5.1.5\src;..\bzip2-1.0.6;$(IncludePath)</IncludePath>
+    <LibraryPath>..\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -138,11 +138,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;WIN32;USE_CDROM;USE_LUA;USE_OGG_VORBIS;UTF8_CAPTION;USE_SMPEG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_image.lib;SDL_mixer.lib;smpeg.lib;SDL_ttf.lib;libbz2.lib;lua5.1.5-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_image.lib;SDL_mixer.lib;smpeg.lib;SDL_ttf.lib;libbz2.lib;lua.lib;native_midi.lib;timidity.lib;freetype.lib;libjpeg.lib;libpng16.lib;zlib.lib;libogg.lib;libvorbis_static.lib;libvorbisfile_static.lib;winmm.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -173,13 +174,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;WIN32;USE_CDROM;USE_LUA;USE_OGG_VORBIS;UTF8_CAPTION;USE_SMPEG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_image.lib;SDL_mixer.lib;smpeg.lib;SDL_ttf.lib;libbz2.lib;lua5.1.5-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_image.lib;SDL_mixer.lib;smpeg.lib;SDL_ttf.lib;libbz2.lib;lua.lib;native_midi.lib;timidity.lib;freetype.lib;libjpeg.lib;libpng16.lib;zlib.lib;libogg.lib;libvorbis_static.lib;libvorbisfile_static.lib;winmm.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

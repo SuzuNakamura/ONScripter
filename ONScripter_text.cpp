@@ -2,7 +2,7 @@
  * 
  *  ONScripter_text.cpp - Text parser of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -567,8 +567,7 @@ bool ONScripter::clickWait( char *out_text )
     flush( REFRESH_NONE_MODE );
     skip_mode &= ~SKIP_TO_EOL;
 
-    if (script_h.checkClickstr(script_h.getStringBuffer() + string_buffer_offset) != 1) string_buffer_offset++;
-    string_buffer_offset++;
+    string_buffer_offset += script_h.checkClickstr(script_h.getStringBuffer() + string_buffer_offset);
 
     if ( (skip_mode & (SKIP_NORMAL | SKIP_TO_EOP) || ctrl_pressed_status) && !textgosub_label ){
         clickstr_state = CLICK_NONE;
@@ -633,8 +632,7 @@ bool ONScripter::clickNewPage( char *out_text )
     flush( REFRESH_NONE_MODE );
     skip_mode &= ~SKIP_TO_EOL;
     
-    if (script_h.checkClickstr(script_h.getStringBuffer() + string_buffer_offset) != 1) string_buffer_offset++;
-    string_buffer_offset++;
+    string_buffer_offset += script_h.checkClickstr(script_h.getStringBuffer() + string_buffer_offset);
 
     if ( (skip_mode & SKIP_NORMAL || ctrl_pressed_status) && !textgosub_label  ){
         num_chars_in_sentence = 0;

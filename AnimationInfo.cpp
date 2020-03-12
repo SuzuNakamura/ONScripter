@@ -2,7 +2,7 @@
  * 
  *  AnimationInfo.cpp - General image storage class of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -447,7 +447,8 @@ void AnimationInfo::blendOnSurface( SDL_Surface *dst_surface, int dst_x, int dst
 
     for (int i=0 ; i<dst_rect.h ; i++){
         for (int j=dst_rect.w ; j!=0 ; j--, src_buffer++, dst_buffer++, lalphap++){
-            if (blending_mode == BLEND_ADD2){
+            if (trans_mode == AnimationInfo::TRANS_STRING ||
+                blending_mode == BLEND_ADD2){
                 ADD2BLEND_PIXEL();
             }
             else{
