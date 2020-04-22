@@ -2,7 +2,7 @@
  * 
  *  ONScripter.cpp - Execution block parser of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -543,7 +543,6 @@ void ONScripter::reset()
 
     new_line_skip_flag = false;
     text_on_flag = true;
-    draw_cursor_flag = false;
 
     setStr(&getret_str, NULL);
     getret_int = 0;

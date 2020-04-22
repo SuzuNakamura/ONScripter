@@ -537,8 +537,8 @@ void ONScripter::leaveTextDisplayMode(bool force_leave_flag)
 bool ONScripter::doClickEnd()
 {
     bool ret = false;
-    
-    draw_cursor_flag = true;
+
+    refresh_shadow_text_mode |= REFRESH_CURSOR_MODE;
 
     if ( automode_flag ){
         event_mode =  WAIT_TEXT_MODE | WAIT_INPUT_MODE | WAIT_VOICE_MODE | WAIT_TIMER_MODE;
@@ -557,8 +557,10 @@ bool ONScripter::doClickEnd()
     }
 
     num_chars_in_sentence = 0;
-    draw_cursor_flag = false;
-
+    
+    refresh_shadow_text_mode &= ~REFRESH_CURSOR_MODE;
+    stopAnimation( clickstr_state );
+    
     return ret;
 }
 

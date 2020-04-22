@@ -2,7 +2,7 @@
  * 
  *  ONScripter_effect.cpp - Effect executer of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -419,11 +419,11 @@ bool ONScripter::doEffect( EffectLink *effect, bool clear_dirty_region )
     effect_counter += effect_timer_resolution;
 
     event_mode = WAIT_INPUT_MODE;
-    waitEvent(0);
-    if ( !((automode_flag || autoclick_time > 0) ||
-           (usewheel_flag  && current_button_state.button == -5) ||
-           (!usewheel_flag && current_button_state.button == -2)) ){
-        effect_counter = effect_duration; // interrupted
+    waitEvent(0); // check for interrput
+    if (!(((automode_flag || autoclick_time > 0) && current_button_state.button == 0) ||
+          (usewheel_flag  && current_button_state.button == -5) ||
+          (!usewheel_flag && current_button_state.button == -2))){
+        effect_counter = effect_duration; // if interrupted
     }
 
     if ( effect_counter < effect_duration && effect_no != 1 ){

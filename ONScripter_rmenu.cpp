@@ -2,7 +2,7 @@
  *
  *  ONScripter_rmenu.cpp - Right click menu handler of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -92,8 +92,10 @@ void ONScripter::enterSystemCall()
     event_mode = IDLE_EVENT_MODE;
     shelter_display_mode = display_mode;
     display_mode = DISPLAY_MODE_TEXT;
-    shelter_draw_cursor_flag = draw_cursor_flag;
-    draw_cursor_flag = false;
+    
+    shelter_refresh_shadow_text_mode = refresh_shadow_text_mode;
+    refresh_shadow_text_mode &= ~REFRESH_CURSOR_MODE;
+    stopAnimation( clickstr_state );
 }
 
 void ONScripter::leaveSystemCall( bool restore_flag )
@@ -109,7 +111,7 @@ void ONScripter::leaveSystemCall( bool restore_flag )
         root_select_link.next = shelter_select_link;
 
         event_mode = shelter_event_mode;
-        draw_cursor_flag = shelter_draw_cursor_flag;
+        refresh_shadow_text_mode = shelter_refresh_shadow_text_mode;
         if ( event_mode & WAIT_BUTTON_MODE ){
             int x = shelter_mouse_state.x * screen_device_width / screen_width;
             int y = shelter_mouse_state.y * screen_device_width / screen_width;

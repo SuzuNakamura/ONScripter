@@ -2,7 +2,7 @@
  * 
  *  ONScripter.h - Execution block parser of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -606,7 +606,7 @@ private:
 
     int  shelter_event_mode;
     int  shelter_display_mode;
-    bool shelter_draw_cursor_flag;
+    int  shelter_refresh_shadow_text_mode;
     Page *cached_page;
     ButtonLink *shelter_button_link;
     SelectLink *shelter_select_link;
@@ -742,7 +742,6 @@ private:
     char *font_file;
     int erase_text_window_mode;
     bool text_on_flag; // suppress the effect of erase_text_window_mode
-    bool draw_cursor_flag;
     int  indent_offset;
 
     void setwindowCore();

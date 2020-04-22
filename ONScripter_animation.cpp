@@ -2,7 +2,7 @@
  * 
  *  ONScripter_animation.cpp - Methods to manipulate AnimationInfo
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -72,36 +72,41 @@ void ONScripter::proceedAnimation(int current_time)
 {
     for (int i=0 ; i<3 ; i++)
         if (tachi_info[i].proceedAnimation(current_time))
-            flushDirect(tachi_info[i].pos, refreshMode() | (draw_cursor_flag?REFRESH_CURSOR_MODE:0));
+            flushDirect(tachi_info[i].pos, refreshMode());
         
     for (int i=MAX_SPRITE_NUM-1 ; i>=0 ; i--)
         if (sprite_info[i].proceedAnimation(current_time))
-            flushDirect(sprite_info[i].pos, refreshMode() | (draw_cursor_flag?REFRESH_CURSOR_MODE:0));
+            flushDirect(sprite_info[i].pos, refreshMode());
 
 #ifdef USE_LUA
     if (lua_handler.is_animatable && !script_h.isExternalScript()){
-        while(lua_handler.next_time <= current_time){
-            int tmp_event_mode = event_mode;
-            int tmp_next_time = next_time;
-            int tmp_string_buffer_offset = string_buffer_offset;
+        int tmp_event_mode = event_mode;
+        int tmp_next_time = next_time;
+        int tmp_string_buffer_offset = string_buffer_offset;
 
-            char *current = script_h.getCurrent();
+        char *current = script_h.getCurrent();
+        while (lua_handler.next_time <= current_time){
             if (lua_handler.isCallbackEnabled(LUAHandler::LUA_ANIMATION))
                 if (lua_handler.callFunction(true, "animation"))
                     errorAndExit( lua_handler.error_str );
-            script_h.setCurrent(current);
-            readToken();
-
-            string_buffer_offset = tmp_string_buffer_offset;
-            next_time = tmp_next_time;
-            event_mode = tmp_event_mode;
-
-            lua_handler.next_time += lua_handler.duration_time;
+                
             if (lua_handler.duration_time <= 0){
                 lua_handler.next_time = current_time;
                 break;
             }
+            
+            // exit the loop not to decrease the performance
+            do{
+                lua_handler.next_time += lua_handler.duration_time;
+            }
+            while (lua_handler.next_time <= current_time);
         }
+        script_h.setCurrent(current);
+        readToken();
+
+        string_buffer_offset = tmp_string_buffer_offset;
+        next_time = tmp_next_time;
+        event_mode = tmp_event_mode;
     }
 #endif
 
@@ -117,7 +122,7 @@ void ONScripter::proceedAnimation(int current_time)
                 dst_rect.x += sentence_font.x() * screen_ratio1 / screen_ratio2;
                 dst_rect.y += sentence_font.y() * screen_ratio1 / screen_ratio2;
             }
-            flushDirect( dst_rect, refreshMode() | (draw_cursor_flag?REFRESH_CURSOR_MODE:0) );
+            flushDirect( dst_rect, refreshMode());
         }
     }
 }
