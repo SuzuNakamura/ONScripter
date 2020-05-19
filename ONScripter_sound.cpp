@@ -2,7 +2,7 @@
  * 
  *  ONScripter_sound.cpp - Methods for playing sound
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -259,7 +259,13 @@ int ONScripter::playMPEG(const char *filename, bool click_flag, bool loop_flag, 
     script_h.cBR->getFile( filename, layer_smpeg_buffer );
     SMPEG_Info info;
     layer_smpeg_sample = SMPEG_new_rwops( SDL_RWFromMem( layer_smpeg_buffer, length ), &info, 0 );
-    if (SMPEG_error( layer_smpeg_sample )){
+    unsigned char packet_code[4] = {0x00, 0x00, 0x01, 0xba};
+    if (SMPEG_error( layer_smpeg_sample ) ||
+        layer_smpeg_buffer[0] != packet_code[0] ||
+        layer_smpeg_buffer[1] != packet_code[1] ||
+        layer_smpeg_buffer[2] != packet_code[2] ||
+        layer_smpeg_buffer[3] != packet_code[3] ||
+        (layer_smpeg_buffer[4] & 0xf0) != 0x20){
         stopSMPEG();
 #ifdef ANDROID
         playVideoAndroid(filename);
