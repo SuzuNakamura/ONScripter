@@ -2,7 +2,7 @@
  * 
  *  ScriptParser.h - Define block parser of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -67,7 +67,7 @@ public:
     void reset();
     int  openScript();
     void setCurrentLabel( const char *label );
-    void gosubReal( const char *label, char *next_script, bool textgosub_flag=false );
+    void gosubReal( const char *label, char *next_script, bool textgosub_flag=false, bool pretextgosub_flag=false );
     int getStringBufferOffset(){return string_buffer_offset;};
 
     FILE *fopen(const char *path, const char *mode, bool use_save_dir=false);
@@ -194,12 +194,14 @@ protected:
         int  nest_mode;
         char *next_script; // used in gosub and for
         int  var_no, to, step; // used in for
-        bool textgosub_flag; // used in textgosub and pretextgosub
+        bool textgosub_flag; // used in textgosub
+        bool pretextgosub_flag; // used in pretextgosub
 
         NestInfo(){
             previous = next = NULL;
             nest_mode = LABEL;
             textgosub_flag = false;
+            pretextgosub_flag = false;
         };
     } last_tilde;
 

@@ -2377,12 +2377,11 @@ int ONScripter::gettagCommand()
         else if ( script_h.pushed_variable.type & ScriptHandler::VAR_STR ){
             if (buf){
                 const char *buf_start = buf;
-                n = script_h.enc.getBytes(buf[0]);
                 unicode1 = script_h.enc.getUTF16(buf);
                 unicode2 = script_h.enc.getUTF16("¡Û", Encoding::CODE_CP932);
                 while(*buf != '/' && *buf != 0 && *buf != ']' && 
                       (!zenkakko_flag || unicode1 != unicode2)){
-                    buf += n;
+                    buf += script_h.enc.getBytes(buf[0]);
                 }
                 setStr( &script_h.getVariableData(script_h.pushed_variable.var_no).str, buf_start, buf-buf_start );
             }

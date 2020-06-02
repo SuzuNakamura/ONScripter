@@ -2,7 +2,7 @@
  *
  *  ScriptParser_command.cpp - Define command executer of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -1001,7 +1001,7 @@ int ScriptParser::gotoCommand()
     return RET_CONTINUE;
 }
 
-void ScriptParser::gosubReal( const char *label, char *next_script, bool textgosub_flag )
+void ScriptParser::gosubReal( const char *label, char *next_script, bool textgosub_flag, bool pretextgosub_flag )
 {
     last_nest_info->next = new NestInfo();
     last_nest_info->next->previous = last_nest_info;
@@ -1009,6 +1009,7 @@ void ScriptParser::gosubReal( const char *label, char *next_script, bool textgos
     last_nest_info = last_nest_info->next;
     last_nest_info->next_script = next_script;
     last_nest_info->textgosub_flag = textgosub_flag;
+    last_nest_info->pretextgosub_flag = pretextgosub_flag;
 
     setCurrentLabel( label );
 }

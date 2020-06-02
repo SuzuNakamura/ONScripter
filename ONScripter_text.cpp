@@ -597,6 +597,7 @@ bool ONScripter::clickWait( char *out_text )
         if ( textgosub_label ){
             saveon_flag = false;
 
+            line_enter_status = 0; // pretext becomes enabled
             textgosub_clickstr_state = CLICK_WAIT;
             if (script_h.getStringBuffer()[string_buffer_offset] == 0x0)
                 textgosub_clickstr_state |= CLICK_EOL;
@@ -651,6 +652,7 @@ bool ONScripter::clickNewPage( char *out_text )
         if ( textgosub_label ){
             saveon_flag = false;
 
+            line_enter_status = 0; // pretext becomes enabled
             textgosub_clickstr_state = CLICK_NEWPAGE;
             gosubReal( textgosub_label, script_h.getWait(), true );
 
@@ -774,11 +776,8 @@ int ONScripter::textCommand()
             string_buffer_offset += n;
     }
 
-    char *current_script = script_h.getCurrent();
     if (pretextgosub_label &&
-        (*(current_script-1) == 0x0a || *(current_script-1) == 0x0d ||
-         strncmp(current_script-6, "langjp", 6) == 0 ||
-         strncmp(current_script-6, "langen", 6) == 0) &&
+        !last_nest_info->pretextgosub_flag &&
         (!pagetag_flag || page_enter_status == 0) &&
         line_enter_status == 0){
 
@@ -795,7 +794,7 @@ int ONScripter::textCommand()
 
         saveon_flag = false;
         pretext_buf = script_h.getCurrent();
-        gosubReal( pretextgosub_label, script_h.getCurrent() );
+        gosubReal(pretextgosub_label, script_h.getCurrent(), false, true);
         line_enter_status = 1;
 
         return RET_CONTINUE;
