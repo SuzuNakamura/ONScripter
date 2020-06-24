@@ -20,7 +20,7 @@
 Since: Feb. 6, 2002<br>
 <!--Last updated: Mar. 21, 2016 (BTS復旧)<br>-->
 <!--Last updated: Jan. 14, 2020 (ONScripter on Windows 更新)<br>-->
-Last updated: May 30, 2020 (ソース更新)<br>
+Last updated: Jun. 21, 2020 (ソース更新)<br>
 <!--Last updated: Jun. 29, 2014 (PNaCl バイナリパッケージ追加)<br>-->
 <!--Last updated: Jul. 12, 2009 (Experimental ソース更新)<br>-->
 </div> <!-- header -->
@@ -89,10 +89,10 @@ Last updated: May 30, 2020 (ソース更新)<br>
 
 <table><tr>
 <td>最新版</td>
-<td><a href="onscripter-20200530.tar.gz">onscripter-20200530.tar.gz</a></td>
+<td><a href="onscripter-20200621.tar.gz">onscripter-20200621.tar.gz</a></td>
 </tr><tr>
 <td>旧版</td>
-<td><a href="onscripter-20200510.tar.gz">onscripter-20200510.tar.gz</a></td>
+<td><a href="onscripter-20200530.tar.gz">onscripter-20200530.tar.gz</a></td>
 </tr></table>
 <!--  <li> <a href="onscripter-exp-20090712.tar.gz">onscripter-exp-20090712.tar.gz</a>(実験版, バグ修正)-->
 
@@ -155,8 +155,8 @@ Last updated: May 30, 2020 (ソース更新)<br>
 
 <ol>
   <li> 現時点(2011/12/15)で最新の NScripter と互換性のあるセーブファイルを入出力することもできます。<a href="#save">異なるプラットフォーム上で同時に遊ぶ方法</a>を参照してください。
-  <li> 全ての操作をキーボードから行えます。もちろんマウスも使えます。
-  <li> CD Audio の演奏を音楽ファイル(MP3, Ogg)の演奏に振り替える機能があります。
+  <li> 全ての操作をキーボードから行うことができます。もちろんマウスも使えます。
+  <li> CD Audio の再生を音楽ファイル(MP3, Ogg)の再生に変更することができます。
   <li> マルチプラットフォームに対応しており、Windows, Linux, MacOS X, MacOS 9, <a href="android/">Android</a>(1.6 以上), iPhone, iPad, PSP, <a href="zaurus/index.html">Zaurus</a>(SL-5500,SL-A300,SL-B500,SL-C700), FreeBSD, Solaris(on SPARC), Tru64 UNIX, OS/2Warp, iPod, PocketPC, Playstation3, Wii, GP2X, NetWalker, Dreamcast での動作が確認されています。それ以外のプラットフォームでも、<a href="#environment">動作環境</a>が準備できれば動作するはずです。<br>
   <li> 全ての命令・仕様を実装していないため、ゲームによっては挙動がおかしくなります。その場合は上記バグトラッキングシステムまで御報告下さい。
 </ol>
@@ -177,8 +177,8 @@ Last updated: May 30, 2020 (ソース更新)<br>
 <ul>
   <li> C++ 処理系
 <ul>
-  <li> g++ 6.3.0 (Linux)
-  <li> Visual Studio 2017 C++ (Windows)
+  <li> g++ 8.3.0 (Linux)
+  <li> Visual Studio 2019 C++ (Windows)
 </ul>
   <li> Unicode で指定された日本語 TTF フォント(ファイル名は default.ttf に)
   <li> libjpeg-6b (<a href="http://www.ijg.org/">Independent JPEG Group</a>)
@@ -198,7 +198,7 @@ Ogg Vorbis 形式の音楽ファイルを再生する場合には入れてください。同梱の Makefile.L
 <h4>必要に応じて導入</h4>
 <ul>
   <li> mad-0.15.1b (<a href="http://www.mars.org/home/rob/proj/mpeg/">MAD: Mpeg Audio Decoder</a>)<br>
-整数演算のみを使用した MP3 演奏ライブラリです。Android や Zaurus で MP3 を演奏する場合には必須です。MAD を使用するためには、SMPEG の代わりに MAD を有効にしてコンパイルした SDL_mixer を使用してください。
+整数演算のみを使用した MP3 再生ライブラリです。Android や Zaurus で MP3 を再生する場合には必須です。MAD を使用するためには、SMPEG の代わりに MAD を有効にしてコンパイルした SDL_mixer を使用してください。
 
   <li> avifile-0.7.48 (<a href="http://avifile.sourceforge.net/">avifile</a>)<br>
 avi 命令を使ってムービーを再生する場合には入れてください。Linux で動作確認をしています。USE_AVIFILE を定義し AVIWrapper.o をリンクしてコンパイルすると使用されます。

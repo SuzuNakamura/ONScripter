@@ -594,14 +594,13 @@ bool ONScripter::clickWait( char *out_text )
                 script_h.getStringBuffer()[ string_buffer_offset ] == ' ') ||
                script_h.getStringBuffer()[ string_buffer_offset ] == '\t' ) string_buffer_offset ++;
 
-        if ( textgosub_label ){
+        if (textgosub_label){
             saveon_flag = false;
 
-            line_enter_status = 0; // pretext becomes enabled
             textgosub_clickstr_state = CLICK_WAIT;
             if (script_h.getStringBuffer()[string_buffer_offset] == 0x0)
                 textgosub_clickstr_state |= CLICK_EOL;
-            gosubReal( textgosub_label, script_h.getWait(), true );
+            gosubReal(textgosub_label, script_h.getWait(), true);
 
             event_mode = IDLE_EVENT_MODE;
             waitEvent(0);
@@ -649,12 +648,11 @@ bool ONScripter::clickNewPage( char *out_text )
                 script_h.getStringBuffer()[ string_buffer_offset ] == ' ') ||
                script_h.getStringBuffer()[ string_buffer_offset ] == '\t' ) string_buffer_offset ++;
 
-        if ( textgosub_label ){
+        if (textgosub_label){
             saveon_flag = false;
 
-            line_enter_status = 0; // pretext becomes enabled
             textgosub_clickstr_state = CLICK_NEWPAGE;
-            gosubReal( textgosub_label, script_h.getWait(), true );
+            gosubReal(textgosub_label, script_h.getWait(), true);
 
             event_mode = IDLE_EVENT_MODE;
             waitEvent(0);
