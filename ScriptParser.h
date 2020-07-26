@@ -278,7 +278,7 @@ protected:
     char *save_dir_envdata;
 
     void deleteNestInfo();
-    void setStr( char **dst, const char *src, int num=-1 );
+    void setStr( char **dst, const char *src, int num = -1, bool to_utf8 = false );
     
     void readToken();
 
@@ -338,11 +338,11 @@ protected:
     struct SaveFileInfo{
         bool valid;
         int  month, day, hour, minute;
-        char sjis_no[5];
-        char sjis_month[5];
-        char sjis_day[5];
-        char sjis_hour[5];
-        char sjis_minute[5];
+        char sjis_no[7];
+        char sjis_month[7];
+        char sjis_day[7];
+        char sjis_hour[7];
+        char sjis_minute[7];
     };
     unsigned int num_save_file;
     char *save_menu_name;

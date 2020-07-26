@@ -1293,21 +1293,19 @@ int ScriptHandler::labelScript()
 
 int ScriptHandler::findLabel( const char *label )
 {
-    int i;
-    char capital_label[256];
+    char buf[256];
 
-    for ( i=0 ; i<(int)strlen( label )+1 ; i++ ){
-        capital_label[i] = label[i];
-        if ( 'A' <= capital_label[i] && capital_label[i] <= 'Z' ) capital_label[i] += 'a' - 'A';
+    for (int i=0; i<(int)strlen(label)+1; i++){
+        buf[i] = label[i];
+        if ('A' <= buf[i] && buf[i] <= 'Z') buf[i] += 'a' - 'A';
     }
-    for ( i=0 ; i<num_of_labels ; i++ ){
-        if ( !strcmp( label_info[i].name, capital_label ) )
+    for (int i=num_of_labels-1; i>=0; --i){
+        if (strcmp(label_info[i].name, buf) == 0)
             return i;
     }
 
-    char *p = new char[ strlen(label) + 32 ];
-    sprintf(p, "Label \"%s\" is not found.", label);
-    errorAndExit( p );
+    sprintf(buf, "Label \"%s\" is not found.", label);
+    errorAndExit(buf);
     
     return -1; // dummy
 }

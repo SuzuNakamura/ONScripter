@@ -2,7 +2,7 @@
  * 
  *  Encoding.h - Character encoding handler
  *
- *  Copyright (c) 2019-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2019-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -40,6 +40,8 @@ public:
     char getTextMarker();
 
     int getBytes(unsigned char ch, int code = -1);
+    int getNum(const unsigned char *buf);
+    
     unsigned short getUTF16(const char *text, int code = -1);
 
 private:

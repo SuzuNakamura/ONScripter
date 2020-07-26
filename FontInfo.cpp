@@ -2,7 +2,7 @@
  * 
  *  FontInfo.cpp - Font information storage class of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -77,6 +77,8 @@ void FontInfo::reset(Encoding *enc)
     is_shadow = true;
     is_transparent = true;
     is_newline_accepted = false;
+    
+    is_line_space_fixed = false;
 }
 
 void *FontInfo::openFont( char *font_file, int ratio1, int ratio2 )
@@ -168,7 +170,8 @@ int FontInfo::x(bool use_ruby_offset)
 int FontInfo::y(bool use_ruby_offset)
 {
     int pitch_y = pitch_xy[1];
-    if (enc->getEncoding() == Encoding::CODE_UTF8 && ttf_font[0])
+    if (!is_line_space_fixed &&
+        enc->getEncoding() == Encoding::CODE_UTF8 && ttf_font[0])
         pitch_y += TTF_FontLineSkip((const TTF_Font*)ttf_font[0]) - font_size_xy[1];
     int y = xy[1]*pitch_y/2 + top_xy[1] + line_offset_xy[1];
     if (use_ruby_offset && rubyon_flag && tateyoko_mode == YOKO_MODE &&

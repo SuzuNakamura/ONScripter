@@ -2,7 +2,7 @@
  * 
  *  FontInfo.h - Font information storage class of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -55,6 +55,7 @@ public:
     bool rubyon_flag;
     int tateyoko_mode;
     Encoding *enc; // encoding
+    bool is_line_space_fixed;
 
     FontInfo();
     void reset(Encoding *enc);

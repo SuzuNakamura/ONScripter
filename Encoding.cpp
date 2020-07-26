@@ -2,7 +2,7 @@
  * 
  *  Encoding.cpp - Character encoding handler
  *
- *  Copyright (c) 2019-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2019-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -55,6 +55,20 @@ int Encoding::getBytes(unsigned char ch, int code)
     }
 
     return 1;
+}
+
+int Encoding::getNum(const unsigned char *buf)
+{
+    int n = 0;
+    
+    while(buf[0] != 0){
+        int n2 = getBytes(buf[0]);
+        n++;
+        if (n2 > 1) n++;
+        buf += n2;
+    }
+
+    return n;
 }
 
 char Encoding::getTextMarker()

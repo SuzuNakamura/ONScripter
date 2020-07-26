@@ -62,11 +62,7 @@ static int osprintf(char *str, const char *format, ...)
     va_list list;
     va_start( list, format );
     while(*format){
-        if (IS_TWO_BYTE(*format)){
-            strncat(str, format, 2);
-            format += 2;
-        }
-        else if (format[0] == '%' && format[1] == 's'){
+        if (format[0] == '%' && format[1] == 's'){
             strcat(str, va_arg(list, char*));
             format += 2;
         }
@@ -189,8 +185,7 @@ void ONScripter::executeSystemMenu()
     menu_font.num_xy[1] = rmenu_link_num;
     menu_font.top_xy[0] = (screen_width * screen_ratio2 / screen_ratio1 - menu_font.num_xy[0] * menu_font.pitch_xy[0]) / 2;
     menu_font.top_xy[1] = (screen_height * screen_ratio2 / screen_ratio1  - menu_font.num_xy[1] * menu_font.pitch_xy[1]) / 2;
-    menu_font.setXY( (menu_font.num_xy[0] - rmenu_link_width) / 2,
-                     (menu_font.num_xy[1] - rmenu_link_num) / 2 );
+    menu_font.setXY(0, 0);
 
     RMenuLink *link = root_rmenu_link.next;
     int counter = 1;
@@ -293,12 +288,14 @@ bool ONScripter::executeSystemLoad()
     current_font = &menu_font;
 
     text_info.fill( 0, 0, 0, 0 );
-        
-    menu_font.num_xy[0] = (strlen(save_item_name)+1)/2+2+13;
-    menu_font.num_xy[1] = num_save_file+2;
+
+    int n = script_h.enc.getNum((unsigned char*)save_item_name);
+    menu_font.num_xy[0] = (n+1)/2 + 2 + 13;
+    menu_font.num_xy[1] = num_save_file + 2;
     menu_font.top_xy[0] = (screen_width * screen_ratio2 / screen_ratio1 - menu_font.num_xy[0] * menu_font.pitch_xy[0]) / 2;
     menu_font.top_xy[1] = (screen_height * screen_ratio2 / screen_ratio1  - menu_font.num_xy[1] * menu_font.pitch_xy[1]) / 2;
-    menu_font.setXY( (menu_font.num_xy[0] - strlen( load_menu_name ) / 2) / 2, 0 );
+    int n2 = script_h.enc.getNum((unsigned char*)load_menu_name);
+    menu_font.setXY((menu_font.num_xy[0]*2 - n2)/4, 0);
     uchar3 color = {0xff, 0xff, 0xff};
     drawString( load_menu_name, color, &menu_font, true, accumulation_surface, NULL, &text_info );
     menu_font.newLine();
@@ -307,29 +304,33 @@ bool ONScripter::executeSystemLoad()
     flush( refreshMode() );
         
     bool nofile_flag;
-    char *buffer = new char[ strlen( save_item_name ) + 31 + 1 ];
+    char *buffer = new char[menu_font.num_xy[0]*4 + 1];
 
     SaveFileInfo save_file_info;
     for ( unsigned int i=1 ; i<=num_save_file ; i++ ){
         searchSaveFile( save_file_info, i );
-        menu_font.setXY( (menu_font.num_xy[0] - (strlen( save_item_name ) / 2 + 15) ) / 2 );
+        menu_font.setXY((menu_font.num_xy[0]*2 - (n + 15*2)) / 4);
 
+        char *format_str = NULL;
         if ( save_file_info.valid ){
-            sprintf( buffer, MESSAGE_SAVE_EXIST,
-                     save_item_name,
-                     save_file_info.sjis_no,
-                     save_file_info.sjis_month,
-                     save_file_info.sjis_day,
-                     save_file_info.sjis_hour,
-                     save_file_info.sjis_minute );
+            setStr(&format_str, MESSAGE_SAVE_EXIST, -1, true);
+            sprintf(buffer, format_str,
+                    save_item_name,
+                    save_file_info.sjis_no,
+                    save_file_info.sjis_month,
+                    save_file_info.sjis_day,
+                    save_file_info.sjis_hour,
+                    save_file_info.sjis_minute);
             nofile_flag = false;
         }
         else{
-            sprintf( buffer, MESSAGE_SAVE_EMPTY,
-                     save_item_name,
-                     save_file_info.sjis_no );
+            setStr(&format_str, MESSAGE_SAVE_EMPTY, -1, true);
+            sprintf(buffer, format_str,
+                    save_item_name,
+                    save_file_info.sjis_no);
             nofile_flag = true;
         }
+        if (format_str) delete[] format_str;
         ButtonLink *button = getSelectableSentence( buffer, &menu_font, false, nofile_flag );
         root_button_link.insert( button );
         button->no = i;
@@ -402,11 +403,13 @@ void ONScripter::executeSystemSave()
 
     text_info.fill( 0, 0, 0, 0 );
 
-    menu_font.num_xy[0] = (strlen(save_item_name)+1)/2+2+13;
-    menu_font.num_xy[1] = num_save_file+2;
+    int n = script_h.enc.getNum((unsigned char*)save_item_name);
+    menu_font.num_xy[0] = (n+1)/2 + 2 + 13;
+    menu_font.num_xy[1] = num_save_file + 2;
     menu_font.top_xy[0] = (screen_width * screen_ratio2 / screen_ratio1 - menu_font.num_xy[0] * menu_font.pitch_xy[0]) / 2;
     menu_font.top_xy[1] = (screen_height * screen_ratio2 / screen_ratio1  - menu_font.num_xy[1] * menu_font.pitch_xy[1]) / 2;
-    menu_font.setXY((menu_font.num_xy[0] - strlen( save_menu_name ) / 2 ) / 2, 0);
+    int n2 = script_h.enc.getNum((unsigned char*)save_menu_name);
+    menu_font.setXY((menu_font.num_xy[0]*2 - n2)/4, 0);
     uchar3 color = {0xff, 0xff, 0xff};
     drawString( save_menu_name, color, &menu_font, true, accumulation_surface, NULL, &text_info );
     menu_font.newLine();
@@ -415,29 +418,33 @@ void ONScripter::executeSystemSave()
     flush( refreshMode() );
         
     bool nofile_flag;
-    char *buffer = new char[ strlen( save_item_name ) + 31 + 1 ];
+    char *buffer = new char[menu_font.num_xy[0]*4 + 1];
     
     for ( unsigned int i=1 ; i<=num_save_file ; i++ ){
         SaveFileInfo save_file_info;
         searchSaveFile( save_file_info, i );
-        menu_font.setXY( (menu_font.num_xy[0] - (strlen( save_item_name ) / 2 + 15) ) / 2 );
+        menu_font.setXY((menu_font.num_xy[0]*2 - (n + 15*2)) / 4);
 
+        char *format_str = NULL;
         if ( save_file_info.valid ){
-            sprintf( buffer, MESSAGE_SAVE_EXIST,
-                     save_item_name,
-                     save_file_info.sjis_no,
-                     save_file_info.sjis_month,
-                     save_file_info.sjis_day,
-                     save_file_info.sjis_hour,
-                     save_file_info.sjis_minute );
+            setStr(&format_str, MESSAGE_SAVE_EXIST, -1, true);
+            sprintf(buffer, format_str,
+                    save_item_name,
+                    save_file_info.sjis_no,
+                    save_file_info.sjis_month,
+                    save_file_info.sjis_day,
+                    save_file_info.sjis_hour,
+                    save_file_info.sjis_minute);
             nofile_flag = false;
         }
         else{
-            sprintf( buffer, MESSAGE_SAVE_EMPTY,
-                     save_item_name,
-                     save_file_info.sjis_no );
+            setStr(&format_str, MESSAGE_SAVE_EMPTY, -1, true);
+            sprintf(buffer, format_str,
+                    save_item_name,
+                    save_file_info.sjis_no);
             nofile_flag = true;
         }
+        if (format_str) delete[] format_str;
         ButtonLink *button = getSelectableSentence( buffer, &menu_font, false, nofile_flag );
         root_button_link.insert( button );
         button->no = i;
@@ -473,28 +480,35 @@ bool ONScripter::executeSystemYesNo( int caller, int file_no )
     text_info.fill( 0, 0, 0, 0 );
     dirty_rect.fill( screen_width, screen_height );
 
-    char name[64] = {'\0'};
+    char name[128] = {'\0'};
+    char *format_str = NULL;
     if ( caller == SYSTEM_SAVE ){
         SaveFileInfo save_file_info;
         searchSaveFile( save_file_info, file_no );
-        sprintf( name, MESSAGE_SAVE_CONFIRM,
-                 save_item_name,
-                 save_file_info.sjis_no );
+        setStr(&format_str, MESSAGE_SAVE_CONFIRM, -1, true);
+        sprintf(name, format_str,
+                save_item_name,
+                save_file_info.sjis_no);
     }
     else if ( caller == SYSTEM_LOAD ){
         SaveFileInfo save_file_info;
         searchSaveFile( save_file_info, file_no );
-        sprintf( name, MESSAGE_LOAD_CONFIRM,
-                 save_item_name,
-                 save_file_info.sjis_no );
+        setStr(&format_str, MESSAGE_LOAD_CONFIRM, -1, true);
+        sprintf(name, format_str,
+                save_item_name,
+                save_file_info.sjis_no);
     }
-    else if ( caller ==  SYSTEM_RESET )
-        strcpy( name, MESSAGE_RESET_CONFIRM );
-    else if ( caller ==  SYSTEM_END )
-        strcpy( name, MESSAGE_END_CONFIRM );
+    else if ( caller ==  SYSTEM_RESET ){
+        setStr(&format_str, MESSAGE_RESET_CONFIRM, -1, true);
+        strcpy(name, format_str);
+    }
+    else if ( caller ==  SYSTEM_END ){
+        setStr(&format_str, MESSAGE_END_CONFIRM, -1, true);
+        strcpy(name, format_str);
+    }
         
-        
-    menu_font.num_xy[0] = strlen(name)/2;
+    int n = script_h.enc.getNum((unsigned char*)name);
+    menu_font.num_xy[0] = (n+1)/2;
     menu_font.num_xy[1] = 3;
     menu_font.top_xy[0] = (screen_width * screen_ratio2 / screen_ratio1 - menu_font.num_xy[0] * menu_font.pitch_xy[0]) / 2;
     menu_font.top_xy[1] = (screen_height * screen_ratio2 / screen_ratio1  - menu_font.num_xy[1] * menu_font.pitch_xy[1]) / 2;
@@ -504,19 +518,23 @@ bool ONScripter::executeSystemYesNo( int caller, int file_no )
 
     flush( refreshMode() );
         
-    int offset1 = strlen(name)/5;
-    int offset2 = strlen(name)/2 - offset1;
-    strcpy( name, MESSAGE_YES );
+    int offset1 = n/5;
+    int offset2 = n/2 - offset1;
+    setStr(&format_str, MESSAGE_YES, -1, true);
+    strcpy(name, format_str);
     menu_font.setXY(offset1-2, 2);
     ButtonLink *button = getSelectableSentence( name, &menu_font, false );
     root_button_link.insert( button );
     button->no = 1;
 
-    strcpy( name, MESSAGE_NO );
+    setStr(&format_str, MESSAGE_NO, -1, true);
+    strcpy(name, format_str);
     menu_font.setXY(offset2, 2);
     button = getSelectableSentence( name, &menu_font, false );
     root_button_link.insert( button );
     button->no = 2;
+    
+    if (format_str) delete[] format_str;
         
     flush( refreshMode() );
         
@@ -738,14 +756,14 @@ void ONScripter::buildDialog(bool yesno_flag, const char *mes1, const char *mes2
     dialog_info.pos.y = (screen_height - dialog_info.pos.h)/2;
 
     // buttons
-    const char* mes[2];
+    char* mes[2] = {NULL};
     if (yesno_flag){
-        mes[0] = MESSAGE_YES;
-        mes[1] = MESSAGE_NO;
+        setStr(&mes[0], MESSAGE_YES, -1, true);
+        setStr(&mes[1], MESSAGE_NO, -1, true);
     }
     else{
-        mes[0] = MESSAGE_OK;
-        mes[1] = MESSAGE_CANCEL;
+        setStr(&mes[0], MESSAGE_OK, -1, true);
+        setStr(&mes[1], MESSAGE_CANCEL, -1, true);
     }
 
     for (int i=0 ; i<2 ; i++){
@@ -811,4 +829,7 @@ void ONScripter::buildDialog(bool yesno_flag, const char *mes1, const char *mes2
 
         root_button_link.insert( btn );
     }
+    
+    delete[] mes[0];
+    delete[] mes[1];
 }

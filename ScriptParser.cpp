@@ -2,7 +2,7 @@
  *
  *  ScriptParser.cpp - Define block parser of ONScripter
  *
- *  Copyright (c) 2001-2019 Ogapee. All rights reserved.
+ *  Copyright (c) 2001-2020 Ogapee. All rights reserved.
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -31,7 +31,7 @@ extern "C"
 #endif
 
 #define VERSION_STR1 "ONScripter"
-#define VERSION_STR2 "Copyright (C) 2001-2016 Studio O.G.A. All Rights Reserved."
+#define VERSION_STR2 "Copyright (C) 2001-2020 Studio O.G.A. All Rights Reserved."
 
 #define DEFAULT_SAVE_MENU_NAME "＜セーブ＞"
 #define DEFAULT_LOAD_MENU_NAME "＜ロード＞"
@@ -176,9 +176,9 @@ void ScriptParser::reset()
 
     /* ---------------------------------------- */
     /* Save/Load related variables */
-    setStr( &save_menu_name, DEFAULT_SAVE_MENU_NAME );
-    setStr( &load_menu_name, DEFAULT_LOAD_MENU_NAME );
-    setStr( &save_item_name, DEFAULT_SAVE_ITEM_NAME );
+    setStr(&save_menu_name, DEFAULT_SAVE_MENU_NAME, -1, true);
+    setStr(&load_menu_name, DEFAULT_LOAD_MENU_NAME, -1, true);
+    setStr(&save_item_name, DEFAULT_SAVE_ITEM_NAME, -1, true);
     num_save_file = 9;
 
     /* ---------------------------------------- */
@@ -229,6 +229,7 @@ void ScriptParser::reset()
     menu_font.pitch_xy[0] = menu_font.font_size_xy[0];
     menu_font.pitch_xy[1] = 2 + menu_font.font_size_xy[1];
     menu_font.window_color[0] = menu_font.window_color[1] = menu_font.window_color[2] = 0xcc;
+    menu_font.is_line_space_fixed = true;
 
     deleteRMenuLink();
 
@@ -620,20 +621,31 @@ void ScriptParser::deleteNestInfo()
     last_nest_info = &root_nest_info;
 }
 
-void ScriptParser::setStr( char **dst, const char *src, int num )
+void ScriptParser::setStr(char **dst, const char *src, int num, bool to_utf8)
 {
-    if ( *dst ) delete[] *dst;
+    if (*dst) delete[] *dst;
     *dst = NULL;
     
-    if ( src ){
+    if (src){
         if (num >= 0){
-            *dst = new char[ num + 1 ];
-            memcpy( *dst, src, num );
+            *dst = new char[num + 1];
+            memcpy(*dst, src, num);
             (*dst)[num] = '\0';
         }
         else{
-            *dst = new char[ strlen( src ) + 1];
-            strcpy( *dst, src );
+            num = strlen(src);
+            if (to_utf8 && script_h.enc.getEncoding() == Encoding::CODE_UTF8){
+                char *tmp_buf = new char[num*2 + 1];
+                DirectReader::convertFromSJISToUTF8(tmp_buf, src);
+                num = strlen(tmp_buf);
+                *dst = new char[num + 1];
+                strcpy(*dst, tmp_buf);
+                delete[] tmp_buf;
+            }
+            else{
+                *dst = new char[num + 1];
+                strcpy(*dst, src);
+            }
         }
     }
 }
